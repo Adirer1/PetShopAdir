@@ -1,0 +1,119 @@
+﻿@model Animal;
+
+<h1>@Model.Name Details</h1>
+
+<table>
+    <tr>
+        <th>Photo</th>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Age</th>
+        <th>Number of Comments</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="@Model.PictureName" width="100" height="100">
+        </td>
+        <td>
+            @Model.Category.Name
+            <form method="post" asp-action="EditValue" asp-controller="Administrator">
+                <div class="form-group">
+                  
+                    <select id="category" name="newValue" class="form-control">
+                        <option value="">-- Select a Category --</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <input type="hidden" name="animalId" value="@Model.Id" />
+                <input type="hidden" name="fieldName" value="Category" />
+
+                <button type="submit" class="btn btn-dark" id="SetCategory">Set</button>
+            </form>
+        </td>
+        <td>
+            @Model.Name
+            <form method="post" asp-action="EditValue" asp-controller="Administrator">
+                <div class="form-group">
+                    <input type="text" id="newValue" name="newValue" class="form-control" />
+                </div>
+
+                <input type="hidden" name="animalId" value="@Model.Id" />
+                <input type="hidden" name="fieldName" value="Name" />
+
+                <button type="submit" class="btn btn-dark">Edit</button>
+            </form>
+        </td>
+        <td>
+            @Model.Description
+            <form method="post" asp-action="EditValue" asp-controller="Administrator">
+                <div class="form-group">
+                    <input type="text" id="newValue" name="newValue" class="form-control" />
+                </div>
+
+                <input type="hidden" name="animalId" value="@Model.Id" />
+                <input type="hidden" name="fieldName" value="Description" />
+
+                <button type="submit" class="btn btn-dark">Edit</button>
+            </form>
+        </td>
+        <td>
+            @Model.Age
+            <form method="post" asp-action="EditValue" asp-controller="Administrator">
+                <div class="form-group">
+                    <input type="text" id="newValue" name="newValue" class="form-control" />
+                </div>
+
+                <input type="hidden" name="animalId" value="@Model.Id" />
+                <input type="hidden" name="fieldName" value="Age" />
+
+                <button type="submit" class="btn btn-dark">Edit</button>
+            </form>
+        </td>
+        <td>
+            @Model.Comments.Count
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <form method="post" asp-action="EditPicture" asp-controller="Administrator" enctype="multipart/form-data">
+                <div class="form-group">
+               
+                    <input type="file" id="newPicture" name="newPicture" accept="image/*" class="form-control-file" />
+                </div>
+
+                <input type="hidden" name="animalId" value="@Model.Id" />
+                <button type="submit" class="btn btn-dark">Apply picture</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+@{
+    string currentController = this.ViewContext.RouteData.Values["controller"] as string;
+}
+<form method="post" asp-action="AddComment" asp-controller="Home" asp-route-id="@Model.Id">
+    <div class="form-group">
+        <label for="commentText">Add Comment:</label>
+        <textarea class="form-control" id="commentText" name="commentText" rows="4"></textarea>
+    </div>
+    <input type="hidden" name="returnController" value="@currentController" />
+    <button type="submit" class="btn btn-primary">Submit Comment</button>
+</form>
+<h2>Comments</h2>
+
+<ul>
+    @foreach (var comment in Model.Comments)
+    {
+        <li>
+            @comment.CommentText
+            <form method="post" asp-action="DeleteComment" asp-controller="Administrator" asp-route-id="@Model.Id" asp-route-commentId="@comment.Id">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </li>
+    }
+</ul>

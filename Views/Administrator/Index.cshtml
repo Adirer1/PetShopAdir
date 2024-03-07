@@ -1,0 +1,63 @@
+﻿@model List<Animal>;
+
+<h1>Select an animal:</h1>
+
+@using (Html.BeginForm("Index", "Administrator", FormMethod.Get))
+{
+    @Html.DropDownList("selectedCategoryId", new SelectList(ViewBag.Categories, "Id", "Name", ViewBag.SelectedCategoryId), "All Categories")
+    <input type="submit" value="Apply filter">
+    <a class="btn btn-success" href="@Url.Action("AddNew", "Administrator")">Add new</a>
+}
+
+<table>
+    <tr>
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Age</th>
+        <th>Number of Comments</th>
+    </tr>
+    @foreach (var animal in Model.OrderByDescending(a => a.Comments.Count))
+    {
+        <tr>
+            <td>
+                <img src="@animal.PictureName" width="100" height="100">
+            </td>
+            <td>@animal.Name</td>
+            <td>@animal.Description</td>
+            <td>@animal.Age</td>
+            <td>@animal.Comments.Count</td>
+            <td>
+                <a class="btn btn-primary" href="@Url.Action("Details", "Administrator", new { id = animal.Id })">Details/Edit</a>
+            </td>
+            <td>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal-@animal.Id">Delete</button>
+            </td>
+        </tr>
+    }
+</table>
+@foreach (var animal in Model)
+{
+    <div class="modal fade" id="confirmDeleteModal-@animal.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel-@animal.Id" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel-@animal.Id">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this animal?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    
+                    <form method="post" action="@Url.Action("Delete", "Administrator", new { id = animal.Id })">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

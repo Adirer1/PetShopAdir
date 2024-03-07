@@ -1,0 +1,32 @@
+﻿@model List<Animal>;
+
+<h1>
+    Home page: Top animals
+</h1>
+
+<table>
+    <tr>
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Age</th>
+        <th>Number of Comments</th>
+    </tr>
+    @foreach (var animal in Model.OrderByDescending(a => a.Comments.Count).Take(2))
+    {
+        <tr>
+            <td>
+                <img src="@animal.PictureName" width="100" height="100">
+            </td>
+            <td >@animal.Name</td>
+            <td >@animal.Description</td>
+            <td>@animal.Age</td>
+            <td >@animal.Comments.Count</td>
+            <td>
+                <a class="btn btn-primary" href="@Url.Action("Details", "Home", new { id = animal.Id })">Details</a>
+            </td>
+        </tr>
+    }
+</table>
+
+

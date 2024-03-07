@@ -1,0 +1,41 @@
+﻿@model Animal
+
+<h1>@Model.Name Details</h1>
+
+<table>
+    <tr>
+        <th>Photo</th>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Age</th>
+        <th>Number of Comments</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="@Model.PictureName" width="100" height="100">
+        </td>
+        <th>@Model.Category.Name</th>
+        <td>@Model.Name</td>
+        <td>@Model.Description</td>
+        <td>@Model.Age</td>
+        <td>@Model.Comments.Count</td>
+    </tr>
+   
+</table>
+<form method="post" asp-action="AddComment" asp-controller="Home" asp-route-id="@Model.Id">
+    <div class="form-group">
+        <label for="commentText">Add Comment:</label>
+        <textarea class="form-control" id="commentText" name="commentText" rows="4"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Comment</button>
+</form>
+<h2>Comments</h2>
+
+<ul>
+    @foreach (var comment in Model.Comments)
+    {
+        <li>@comment.CommentText</li>
+    }
+</ul>
+

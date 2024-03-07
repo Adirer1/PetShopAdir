@@ -1,0 +1,41 @@
+﻿@model List<Category>;
+@{
+    ViewData["Title"] = "Add New Animal";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" asp-action="Create" asp-controller="Administrator" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" name="CategoryId" class="form-control" required>
+            <option value="">-- Select a Category --</option>
+            @foreach (var category in Model)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="Name" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="Age" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="Description" class="form-control" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="picture">Picture:</label>
+        <input type="file" id="picture" name="Picture" accept="image/*" class="form-control-file" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Animal</button>
+</form>
